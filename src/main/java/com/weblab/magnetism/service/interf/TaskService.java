@@ -1,4 +1,6 @@
 package com.weblab.magnetism.service.interf;
 
-public interface TaskService {
+import com.weblab.magnetism.model.Task;
+
+public interface TaskService extends CRUDService<Task, Long> {
 }

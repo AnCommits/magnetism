@@ -1,4 +1,6 @@
 package com.weblab.magnetism.service.interf;
 
-public interface UserService {
+import com.weblab.magnetism.model.User;
+
+public interface UserService extends CRUDService<User, Long> {
 }
