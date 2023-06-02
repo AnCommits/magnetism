@@ -17,16 +17,18 @@ public abstract class CRUDController<E, K> {
 
     @GetMapping("/read/{id}")
     public String showRead(@PathVariable String id, Model model) {
-
         model.addAttribute("id", id);
         return getEntityName() + "/read";
     }
 
+    @GetMapping("/create")
     public String showCreate() {
-
+        return getEntityName() + "/create";
     }
 
-    public String showUpdate() {
-
+    @GetMapping("/update/{id}")
+    public String showUpdate(@PathVariable String id, Model model) {
+        model.addAttribute("id", id);
+        return getEntityName() + "/update";
     }
 }
