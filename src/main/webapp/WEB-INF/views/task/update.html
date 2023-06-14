@@ -5,17 +5,17 @@
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <title>Update Role</title>
+    <title>Update Task</title>
     <script type="text/javascript" src="/js/jquery-3.6.0.js"></script>
 </head>
 
 <body>
 <div class="w3-container">
 
-    <p id="roleId" hidden><span th:text="${id}"/></p>
+    <p id="taskId" hidden><span th:text="${id}"/></p>
 
     <div class="w3-container w3-bar w3-blue">
-        <span class="w3-bar-item" style="padding-left:1px"><b>Update Role</b></span>
+        <span class="w3-bar-item" style="padding-left:1px"><b>Update Task</b></span>
 
         <span class="w3-bar-item w3-button" style="float: right;">
             <img th:src="@{/images/icon_logout.jpg}"
@@ -41,11 +41,19 @@
         </tr>
         <tr>
             <td>Id</td>
-            <td><label id="role_id" name="role_id_name" ></label></td>
+            <td><label id="task_id" name="task_id_name" ></label></td>
         </tr>
         <tr>
-            <td>Role</td>
-            <td><input id="role" name="role_name" type="text"></td>
+            <td>Text</td>
+            <td><input id="text" name="text_name" type="text"></td>
+        </tr>
+        <tr>
+            <td>User Id</td>
+            <td><input id="userId" name="userId_name" type="text"></td>
+        </tr>
+        <tr>
+            <td>Date</td>
+            <td><input id="date" name="date_name" type="text"></td>
         </tr>
     </table>
 
@@ -70,34 +78,47 @@
             }
         });
 
-        function RoleDTO(id,role){
+        // function TaskDTO(id,text,userId,date){
+        //     this.id = id;
+        //     this.text = text;
+        //     this.userId = userId;
+        //     this.date = date;
+        // }
+
+        function TaskDTO(id,text,userId){
             this.id = id;
-            this.role = role;
+            this.text = text;
+            this.userId = userId;
         }
 
         $(document).delegate('#btnSave','click',function(event){
             event.preventDefault();
 
-            var roleId = $('#roleId').text();
+            var taskId = $('#taskId').text();
 
-            var id = roleId;
-            var role = $('#role').val();
+            var id = taskId;
+            var text = $('#text').val();
+            var userId = $('#userId').val();
+            // var date = $('#date').val();
 
-            var roleDTO = new RoleDTO(id,role);
+            // var taskDTO = new TaskDTO(id,text,userId,date);
+            var taskDTO = new TaskDTO(id,text,userId);
 
-            console.log(roleId);
+            console.log(taskId);
             console.log(id);
-            console.log(role);
+            console.log(text);
+            console.log(userId);
+            console.log(date);
 
-            console.log(roleDTO);
-            console.log(JSON.stringify(roleDTO));
+            console.log(taskDTO);
+            console.log(JSON.stringify(taskDTO));
 
             $.ajax({
                 type: "PUT",
-                url: '/role',
-                data: JSON.stringify(roleDTO),
+                url: '/task',
+                data: JSON.stringify(taskDTO),
                 success: function(result){
-                    location.href="/ui/role/read/" + roleId;
+                    location.href="/ui/task/read/" + taskId;
                     window.setTimeout(function(){
                         location.reload();
                     }, 1000);
@@ -111,9 +132,9 @@
 
         $(document).delegate('#btnGoToRead','click',function(result){
 
-            var roleId = $('#roleId').text();
+            var taskId = $('#taskId').text();
 
-            location.href="/ui/role/read/" + roleId;
+            location.href="/ui/task/read/" + taskId;
             window.setTimeout(function(){
                 location.reload();
             }, 1000);
@@ -122,14 +143,16 @@
 
         function ajaxGet(){
 
-            var roleId = $('#roleId').text();
+            var taskId = $('#taskId').text();
 
-            $.getJSON('/role/' + roleId, function(json){
+            $.getJSON('/task/' + taskId, function(json){
 
                 console.log(json);
 
-                $('#role_id').text(json.id);
-                $('#role').val(json.role);
+                $('#task_id').text(json.id);
+                $('#text').val(json.text);
+                $('#userId').val(json.userId);
+                $('#date').val(json.date);
             });
         }
 

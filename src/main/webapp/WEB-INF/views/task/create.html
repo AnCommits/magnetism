@@ -5,17 +5,15 @@
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <title>Update Role</title>
+    <title>Create Task</title>
     <script type="text/javascript" src="/js/jquery-3.6.0.js"></script>
 </head>
 
 <body>
 <div class="w3-container">
 
-    <p id="roleId" hidden><span th:text="${id}"/></p>
-
     <div class="w3-container w3-bar w3-blue">
-        <span class="w3-bar-item" style="padding-left:1px"><b>Update Role</b></span>
+        <span class="w3-bar-item" style="padding-left:1px"><b>Create Task</b></span>
 
         <span class="w3-bar-item w3-button" style="float: right;">
             <img th:src="@{/images/icon_logout.jpg}"
@@ -33,29 +31,36 @@
     </div>
     <br>
 
-
-    <table id="update_entity_table" class="w3-table w3-bordered">
+    <table id="create_entity_table" class="w3-table w3-bordered">
         <tr>
             <th>Property Name</th>
             <th>Property Value</th>
         </tr>
+
         <tr>
             <td>Id</td>
-            <td><label id="role_id" name="role_id_name" ></label></td>
+            <td><input id="id" name="task_id_name" type="text"></td>
         </tr>
         <tr>
-            <td>Role</td>
-            <td><input id="role" name="role_name" type="text"></td>
+            <td>Text</td>
+            <td><input id="task_text" name="task_text_name" type="text"></td>
+        </tr>
+        <tr>
+            <td>User Id</td>
+            <td><input id="task_userId" name="task_userId_name" type="text"></td>
+        </tr>
+        <tr>
+            <td>Date</td>
+            <td><input id="task_date" name="task_date_name" type="text"></td>
         </tr>
     </table>
 
     <br>
     <br>
 
-
     <div class="container">
-        <button id="btnSave" class="btnSaveAuto">Save</button>
-        <button id="btnGoToRead" type="button">Cancel</button>
+        <button id="btnSave" class="btnSaveEntity">Save</button>
+        <button onclick="location.href='/ui/task/list'" type="button">Cancel</button>
     </div>
 
     <!--    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>-->
@@ -70,68 +75,48 @@
             }
         });
 
-        function RoleDTO(id,role){
+        // function TaskDTO(id,text,userId,date){
+        //     this.id = id;
+        //     this.text = text;
+        //     this.userId = userId;
+        //     this.date = date;
+        // }
+
+        function TaskDTO(id,text,userId){
             this.id = id;
-            this.role = role;
+            this.text = text;
+            this.userId = userId;
         }
 
         $(document).delegate('#btnSave','click',function(event){
             event.preventDefault();
 
-            var roleId = $('#roleId').text();
+            var id = $('#id').val();
+            var text = $('#task_text').val();
+            var userId = $('#task_userId').val();
+            // var date = $('#task_date').val();
 
-            var id = roleId;
-            var role = $('#role').val();
+            // var taskDTO = new TaskDTO(id,text,userId,date);
+            var taskDTO = new TaskDTO(id,text,userId);
 
-            var roleDTO = new RoleDTO(id,role);
-
-            console.log(roleId);
-            console.log(id);
-            console.log(role);
-
-            console.log(roleDTO);
-            console.log(JSON.stringify(roleDTO));
+            console.log(taskDTO);
+            console.log(JSON.stringify(taskDTO));
 
             $.ajax({
-                type: "PUT",
-                url: '/role',
-                data: JSON.stringify(roleDTO),
+                type: "POST",
+                url: "/task",
+                data: JSON.stringify(taskDTO),
                 success: function(result){
-                    location.href="/ui/role/read/" + roleId;
+                    location.href="/ui/task/list";
                     window.setTimeout(function(){
                         location.reload();
                     }, 1000);
                 },
                 error: function(err){
-                    alert('PUT REQUEST ERROR!');
+                    alert('POST REQUEST ERROR!');
                 }
             });
         });
-
-
-        $(document).delegate('#btnGoToRead','click',function(result){
-
-            var roleId = $('#roleId').text();
-
-            location.href="/ui/role/read/" + roleId;
-            window.setTimeout(function(){
-                location.reload();
-            }, 1000);
-        });
-
-
-        function ajaxGet(){
-
-            var roleId = $('#roleId').text();
-
-            $.getJSON('/role/' + roleId, function(json){
-
-                console.log(json);
-
-                $('#role_id').text(json.id);
-                $('#role').val(json.role);
-            });
-        }
 
         $(document).delegate('#btnLogout','click',function(event){
             event.preventDefault();
@@ -151,13 +136,7 @@
             });
         });
 
-        $(document).ready(function() {
-            ajaxGet();
-        });
-
     </script>
-
 </div>
-
 </body>
 </html>
