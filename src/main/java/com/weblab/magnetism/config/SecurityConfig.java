@@ -15,8 +15,15 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/auth/login", "/error").permitAll()
-                .anyRequest()
+                .requestMatchers("/auth/login", "/error")
+                .permitAll()
+//                .antMatchers("/auth/login", "/error").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin().loginPage("auth/login").loginProcessingUrl("/process-login")
+                .defaultSuccessUrl("/ui/user/list", true)
+                .failureUrl("/auth/login?error");
+        return http.build();
     }
 
 }
